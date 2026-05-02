@@ -363,9 +363,72 @@
       .catch(function (e) { logEl.textContent += 'Error: ' + String(e) + '\n'; });
   };
 
+  // --- Codex OAuth ---
+  var codexCard = document.getElementById('codexOauthCard');
+  var codexStartEl = document.getElementById('codexStart');
+  var codexLogEl = document.getElementById('codexLog');
+  var codexRedirectEl = document.getElementById('codexRedirectUrl');
+  var codexCompleteEl = document.getElementById('codexComplete');
+  var codexResultEl = document.getElementById('codexResult');
+
+  function showCodexCard() {
+    // Show the Codex OAuth card only after onboarding is complete
+    fetch('/setup/api/status', { credentials: 'same-origin' })
+      .then(function (r) { return r.json(); })
+      .then(function (d) { if (d.configured) codexCard.style.display = ''; })
+      .catch(function () {});
+  }
+
+  if (codexStartEl) {
+    codexStartEl.onclick = function () {
+      codexLogEl.textContent = 'Starting OAuth flow... (this takes ~20 seconds)\n';
+      codexResultEl.textContent = '';
+      codexRedirectEl.value = '';
+      fetch('/setup/api/codex/start', { method: 'POST', credentials: 'same-origin' })
+        .then(function (r) { return r.json(); })
+        .then(function (d) {
+          codexLogEl.textContent = d.output || '';
+          if (d.oauthUrl) {
+            codexLogEl.textContent += '\n\n--- Open this URL in your browser ---\n' + d.oauthUrl + '\n';
+            codexLogEl.textContent += '\nAfter authorizing, your browser will show an error page.\nCopy the full URL from the address bar and paste it below.\n';
+            window.open(d.oauthUrl, '_blank');
+          } else if (d.exited) {
+            codexLogEl.textContent += '\n[OAuth process exited with code ' + d.exitCode + ']\n';
+          } else {
+            codexLogEl.textContent += '\nCould not extract OAuth URL. Check the output above.\n';
+          }
+        })
+        .catch(function (e) { codexLogEl.textContent += 'Error: ' + String(e) + '\n'; });
+    };
+  }
+
+  if (codexCompleteEl) {
+    codexCompleteEl.onclick = function () {
+      var url = codexRedirectEl.value.trim();
+      if (!url) { codexResultEl.textContent = 'Paste the redirect URL first.'; return; }
+      codexResultEl.textContent = 'Completing OAuth...\n';
+      fetch('/setup/api/codex/complete', {
+        method: 'POST', credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ redirectUrl: url }),
+      })
+        .then(function (r) { return r.json(); })
+        .then(function (d) {
+          codexResultEl.textContent = d.output || d.error || '';
+          if (d.ok) {
+            codexResultEl.textContent += '\n✓ ChatGPT subscription connected! Gateway restarted.\n';
+          }
+        })
+        .catch(function (e) { codexResultEl.textContent += 'Error: ' + String(e) + '\n'; });
+    };
+  }
+
   // Populate provider/auth selects ASAP (fast endpoint, no subprocesses)
   loadAuthGroupsFast();
 
   // Load the rest of status (version/help) in parallel
   refreshStatus();
+
+  // Show Codex card if configured
+  showCodexCard();
 })();

@@ -511,6 +511,24 @@ app.get("/setup", requireSetupAuth, (_req, res) => {
     <input id="customProviderModelId" placeholder="" />
   </div>
 
+  <div class="card" id="codexOauthCard" style="display:none; border-color:#10b981">
+    <h2>ChatGPT Subscription (Codex OAuth)</h2>
+    <p class="muted">Connect your ChatGPT Plus/Pro subscription. Setup must be completed first (step 3 below).</p>
+    <ol class="muted" style="margin:0.5rem 0; padding-left:1.25rem">
+      <li>Click <strong>Start OAuth</strong> — it generates an authorization URL</li>
+      <li>Open that URL, log in with your ChatGPT account, click Continue</li>
+      <li>Your browser will try to redirect to <code>localhost</code> and show an error — <strong>this is expected</strong></li>
+      <li>Copy the <strong>full URL</strong> from your browser's address bar (starts with <code>http://127.0.0.1...</code>)</li>
+      <li>Paste it below and click <strong>Complete OAuth</strong></li>
+    </ol>
+    <button id="codexStart" style="background:#10b981">Start OAuth</button>
+    <pre id="codexLog" style="white-space:pre-wrap"></pre>
+    <label style="margin-top:0.5rem">Paste the redirect URL here:</label>
+    <input id="codexRedirectUrl" placeholder="http://127.0.0.1:1455/auth/callback?code=...&state=..." style="font-family:monospace; font-size:0.85rem" />
+    <button id="codexComplete" style="background:#111; margin-top:0.5rem">Complete OAuth</button>
+    <pre id="codexResult" style="white-space:pre-wrap"></pre>
+  </div>
+
   <div class="card">
     <h2>3) Run onboarding</h2>
     <button id="run">Run setup</button>
@@ -905,6 +923,93 @@ app.post("/setup/api/run", requireSetupAuth, async (req, res) => {
     console.error("[/setup/api/run] error:", err);
     return respondJson(500, { ok: false, output: `Internal error: ${String(err)}` });
   }
+});
+
+// --- Codex OAuth (two-step: start → paste redirect URL → complete) ---
+
+let codexAuthProc = null;
+let codexAuthOutput = "";
+let codexAuthResolve = null;
+
+app.post("/setup/api/codex/start", requireSetupAuth, async (_req, res) => {
+  if (!isConfigured()) {
+    return res.status(400).json({ ok: false, output: "Run onboarding first (step 3) before connecting ChatGPT." });
+  }
+
+  if (codexAuthProc) {
+    try { codexAuthProc.kill("SIGTERM"); } catch {}
+    codexAuthProc = null;
+  }
+  codexAuthOutput = "";
+
+  const args = clawArgs(["models", "auth", "login", "--provider", "openai-codex"]);
+
+  codexAuthProc = childProcess.spawn(OPENCLAW_NODE, args, {
+    env: { ...process.env, OPENCLAW_STATE_DIR: STATE_DIR, OPENCLAW_WORKSPACE_DIR: WORKSPACE_DIR },
+    stdio: ["pipe", "pipe", "pipe"],
+  });
+
+  codexAuthProc.stdout.on("data", (d) => { codexAuthOutput += d.toString("utf8"); });
+  codexAuthProc.stderr.on("data", (d) => { codexAuthOutput += d.toString("utf8"); });
+
+  const exitPromise = new Promise((resolve) => {
+    codexAuthResolve = resolve;
+    codexAuthProc.on("exit", (code) => { codexAuthProc = null; resolve(code); });
+    codexAuthProc.on("error", (err) => { codexAuthOutput += `\nspawn error: ${err}`; codexAuthProc = null; resolve(127); });
+  });
+
+  // Wait up to 20s for the OAuth URL to appear in output (manual fallback kicks in after ~15s)
+  const deadline = Date.now() + 25_000;
+  while (Date.now() < deadline && codexAuthProc) {
+    if (/https:\/\/auth\.openai\.com/.test(codexAuthOutput) || /authorize\?/.test(codexAuthOutput) || /127\.0\.0\.1/.test(codexAuthOutput)) break;
+    await sleep(500);
+  }
+
+  // Extract the OAuth URL from output
+  const urlMatch = codexAuthOutput.match(/(https:\/\/auth\.openai\.com[^\s"']+)/);
+  const oauthUrl = urlMatch ? urlMatch[1] : null;
+
+  if (!codexAuthProc) {
+    const code = await exitPromise;
+    return res.json({ ok: false, output: codexAuthOutput, oauthUrl, exited: true, exitCode: code });
+  }
+
+  res.json({ ok: true, output: codexAuthOutput, oauthUrl, waiting: true });
+});
+
+app.post("/setup/api/codex/complete", requireSetupAuth, async (req, res) => {
+  const redirectUrl = String((req.body && req.body.redirectUrl) || "").trim();
+  if (!redirectUrl) {
+    return res.status(400).json({ ok: false, error: "Missing redirect URL" });
+  }
+
+  if (!codexAuthProc) {
+    return res.status(400).json({ ok: false, error: "No OAuth session in progress. Click 'Start OAuth' first." });
+  }
+
+  // Feed the redirect URL to stdin (OpenClaw's manual fallback reads it)
+  try {
+    codexAuthProc.stdin.write(redirectUrl + "\n");
+  } catch (err) {
+    return res.status(500).json({ ok: false, error: `Failed to send URL: ${err}` });
+  }
+
+  // Wait for the process to finish (token exchange)
+  const code = await new Promise((resolve) => {
+    const timer = setTimeout(() => { try { codexAuthProc?.kill("SIGTERM"); } catch {} resolve(124); }, 30_000);
+    if (codexAuthResolve) {
+      const origResolve = codexAuthResolve;
+      codexAuthResolve = (c) => { clearTimeout(timer); origResolve(c); resolve(c); };
+    }
+    if (!codexAuthProc) { clearTimeout(timer); resolve(0); }
+  });
+
+  // Restart gateway to pick up new credentials
+  if (isConfigured()) {
+    await restartGateway();
+  }
+
+  res.json({ ok: code === 0, output: redactSecrets(codexAuthOutput), exitCode: code });
 });
 
 app.get("/setup/api/debug", requireSetupAuth, async (_req, res) => {
