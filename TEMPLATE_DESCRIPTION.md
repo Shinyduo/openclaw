@@ -1,79 +1,79 @@
 ## Template Titles
 
 **Railway Title:** `OpenClaw [Updated May '26]`
-**Railway Description:** `OpenClaw [May '26] (Personal AI Assistant with Multi-Model & Channel Support) Self Host`
+**Railway Description:** `OpenClaw [May '26] (Claw AI Multi-Agent Assistant with Webchat & Plugins) Self Host`
 **Spreadsheet Title:** `OpenClaw (Open-Source Personal AI Assistant & Agent Platform)`
 **GitHub Description:** `OpenClaw — open-source personal AI assistant by the community. Deploy on Railway with one click.`
 
 ---
 
-![OpenClaw open source personal AI assistant platform](https://res.cloudinary.com/dojdzamvk/image/upload/v1746175200/openclaw_banner_oc.png "Hosting OpenClaw open source AI assistant on Railway")
+![OpenClaw Claw AI open source personal assistant and multi-agent platform](https://res.cloudinary.com/dojdzamvk/image/upload/v1746175200/openclaw_banner_oc.png "Hosting OpenClaw Claw AI assistant on Railway")
 
-# Deploy and Host self hosted OpenClaw (Open-Source AI Assistant) on Railway
+# Deploy and Host self hosted OpenClaw (Open-Source Claw AI Assistant) on Railway
 
-OpenClaw is an open-source personal AI assistant with 347k+ GitHub stars and 1,200+ contributors. It connects to any LLM provider — OpenAI, Anthropic, Google Gemini, OpenRouter, and custom endpoints — with native messaging on Telegram, Discord, Slack, and WhatsApp. OpenClaw features persistent memory, plugin extensions, a web-based Control UI, and gateway authentication. It is a self-hosted alternative to ChatGPT Plus, Claude Pro, and Google Gemini Advanced.
+OpenClaw is an open-source Claw AI personal assistant with 347k+ GitHub stars. It connects to any LLM provider — OpenAI, Anthropic, Google Gemini, OpenRouter, Baidu AI Cloud Qianfan, and custom endpoints — with native webchat, Telegram, Discord, Slack, WhatsApp, Feishu, and Google Meet integrations. OpenClaw features multi-agent orchestration, DuckDuckGo search provider, websearch tools, persistent memory, plugin extensions, and a ClawBot gateway with TypeBox schema validation. It is a self-hosted alternative to ChatGPT Plus, Claude Pro, and Clawd AI.
 
-## About Hosting OpenClaw open-source software on Railway (self hosted OpenClaw template)
+## About Hosting OpenClaw open-source software on Railway (self hosted Claw AI template)
 
-Self hosting OpenClaw means your conversations, API keys, and configuration stay on infrastructure you control. There is no dependency on cloud subscriptions that limit usage or access your data. With Railway, the full stack deploys automatically — the Express wrapper, OpenClaw gateway, persistent volume for state and workspace, all provisioned with private networking and HTTPS.
+Self hosting OpenClaw means your conversations, API keys, and configuration stay on infrastructure you control. There is no dependency on cloud subscriptions that limit usage. With Railway, the full Claw AI stack deploys automatically — the Express wrapper, ClawBot gateway, persistent volume for state and workspace, all provisioned with private networking and HTTPS.
 
-## Why Deploy OpenClaw, the ChatGPT alternative on Railway (Railway Free Trial)
+## Why Deploy OpenClaw, the Clawd AI alternative on Railway (Railway Free Trial)
 
-Instead of paying $20/month for ChatGPT Plus or Claude Pro with usage caps, you can run OpenClaw with your own API keys and unlimited usage. Use your existing ChatGPT subscription via Codex OAuth, or bring any API key. On Railway, you only pay for compute. Railway gives every new user a $5 free trial when signing up with GitHub, making it easy to test the full assistant stack.
+Instead of paying for ChatGPT Plus or Claude Pro with usage caps, you can run OpenClaw with your own API keys and unlimited usage. OpenClaw supports multi-agent workflows, webchat, DuckDuckGo search provider integration, and websearch tools out of the box. Railway gives every new user a $5 free trial when signing up with GitHub, making it easy to test the full Claw AI assistant stack.
 
 ### Railway vs Other Hosting Providers and VPS for OpenClaw self hosting
 
-| Provider          | What You Get with Railway                                | What You Get with the Other Provider                     |
-| ----------------- | -------------------------------------------------------- | -------------------------------------------------------- |
-| **DigitalOcean**  | One-click deploy with volume, setup UI & auto HTTPS      | Manual droplet setup, Node.js install, Nginx config      |
-| **AWS**           | Transparent pricing, no IAM/ECS complexity               | Powerful but complex container orchestration and billing  |
-| **Hetzner**       | Managed app with persistent volume and domain            | Great price but requires manual Docker and proxy setup   |
+| Provider          | What You Get with Railway                                | What You Get with the Other Provider                        |
+| ----------------- | -------------------------------------------------------- | ----------------------------------------------------------- |
+| **DigitalOcean**  | One-click deploy with volume, setup UI & auto HTTPS      | Manual droplet setup, Node.js install, Nginx config         |
+| **AWS**           | Transparent pricing, no IAM/ECS complexity               | Powerful but complex multi-agent container orchestration    |
+| **Hetzner**       | Managed app with persistent volume and domain            | Great VPS hosting Hetzner price but manual Docker setup     |
 
 ## Common Use Cases for hosted OpenClaw
 
-Here are common use cases for the open-source AI assistant platform:
+Here are common use cases for the open-source Claw AI assistant platform:
 
-* Running a personal AI assistant on Telegram, Discord, Slack, or WhatsApp with persistent context across conversations.
-* Using your ChatGPT subscription via Codex OAuth or any API key from OpenAI, Anthropic, Google, OpenRouter, or custom endpoints.
-* Extending functionality with plugins for web browsing, code execution, file management, and custom tool integrations.
-* Managing multiple AI providers and models through the web Control UI without editing configuration files.
-* Configuring gateway authentication and device pairing for secure multi-user and multi-device access.
+* Running a personal Claw AI assistant with webchat, Telegram, Discord, Slack, WhatsApp, Feishu, or Google Meet integration for persistent context across conversations.
+* Deploying multi-agent workflows where OpenClaw spawns and coordinates specialized subagents for research, coding, and data analysis tasks.
+* Using the built-in DuckDuckGo search provider and websearch tools for real-time information retrieval and web browsing automation.
+* Connecting to 200+ LLM models including Baidu AI Cloud Qianfan, OpenRouter, and custom endpoints through the ClawBot gateway.
+* Managing multiple AI providers through the webchat Control UI with TypeBox schema validation for configuration.
 
-![OpenClaw setup wizard and Control UI](https://res.cloudinary.com/dojdzamvk/image/upload/v1746175200/openclaw_setup_ui_oc.png "OpenClaw open source AI assistant setup wizard")
+![OpenClaw Claw AI webchat setup wizard and Control UI](https://res.cloudinary.com/dojdzamvk/image/upload/v1746175200/openclaw_setup_ui_oc.png "OpenClaw Claw AI webchat assistant setup wizard")
 
 ## Dependencies for OpenClaw Docker hosted on Railway
 
-OpenClaw runs as a single container with Node.js, Python, and all dependencies bundled. It requires a persistent volume for storing configuration, conversation state, and workspace files.
+OpenClaw runs as a single container with Node.js, Python, and all dependencies bundled. It requires a persistent volume for storing ClawBot configuration, conversation state, and workspace files.
 
-### Deployment Dependencies for Managed OpenClaw Service (OSS AI Assistant)
+### Deployment Dependencies for Managed OpenClaw Service (OSS Claw AI Assistant)
 
-A managed OpenClaw service on Railway requires the application container built from source with a persistent volume at `/data` for state, workspace, and npm/pnpm package storage.
+A managed OpenClaw service on Railway requires the application container built from source with a persistent volume at `/data` for state, workspace, and npm/pnpm storage.
 
 ### Implementation Details for OpenClaw (Using OpenClaw official source build)
 
-This template builds OpenClaw v2026.4.29 from source with a Node.js Express wrapper that provides a web setup UI at `/setup`, proxies to the internal gateway, and handles authentication. The wrapper listens on PORT 8080 with Basic auth via `SETUP_PASSWORD`. Key envs include `SETUP_PASSWORD`, `OPENCLAW_STATE_DIR`, `OPENCLAW_WORKSPACE_DIR`, and optional provider keys like `OPENAI_API_KEY` or `ANTHROPIC_API_KEY`.
+This template builds OpenClaw v2026.4.29 from source with a Node.js Express wrapper providing a web setup UI at `/setup`, proxying to the internal ClawBot gateway. The wrapper uses Basic auth via `SETUP_PASSWORD`. Key envs include `SETUP_PASSWORD`, `OPENCLAW_STATE_DIR`, and optional provider keys.
 
 ## How does OpenClaw compare against other AI Assistant platforms
 
 ### OpenClaw vs ChatGPT Plus (ChatGPT Alternative)
-* **Model Freedom:** OpenClaw connects to any LLM — OpenAI, Anthropic, Google, OpenRouter, or self-hosted models. ChatGPT locks you into OpenAI models.
-* **Data Ownership:** Your conversations and API keys stay on your server. ChatGPT stores everything on OpenAI's infrastructure.
+* **Multi-Agent:** OpenClaw supports multi-agent orchestration with subagent spawning for parallel task execution. ChatGPT runs single conversations with no agent coordination or multi-agent workflows.
+* **Data Ownership:** Your conversations, API keys, and ClawBot configuration stay on your server. ChatGPT stores everything on OpenAI infrastructure with no export options.
 
-### OpenClaw vs Claude Pro (Claude Alternative)
-* **Multi-Provider:** OpenClaw can use Claude via API alongside other providers simultaneously. Claude Pro limits you to Anthropic's web interface.
-* **Messaging Channels:** Native Telegram, Discord, Slack, and WhatsApp integration. Claude Pro is web and mobile only.
-
-### OpenClaw vs Google Gemini Advanced (Gemini Alternative)
-* **Plugin Ecosystem:** OpenClaw has an extensible plugin system for custom tools. Gemini Advanced has limited extension capabilities.
-* **Self Hosted:** Full control over data and configuration. Google Gemini processes everything through Google's cloud.
+### OpenClaw vs Clawd AI (Clawd AI Alternative)
+* **Open Source:** OpenClaw is fully open source with 347k+ stars. Clawd AI is a closed platform with limited customization options.
+* **Webchat & Channels:** OpenClaw has native webchat, Telegram, Discord, Feishu, WhatsApp, and Google Meet. Clawd AI offers fewer channel integrations.
 
 ### OpenClaw vs Open WebUI (Open WebUI Alternative)
-* **Multi-Channel Gateway:** OpenClaw includes native Telegram, Discord, Slack, and WhatsApp gateways with device pairing. Open WebUI is browser-only without any messaging channel integration.
-* **Gateway Architecture:** OpenClaw's gateway handles token authentication, device pairing, trusted proxies, and secure remote access. Open WebUI requires additional reverse proxy and auth setup for remote use.
+* **Multi-Agent & Channels:** OpenClaw includes multi-agent workflows, webchat, and native messaging gateways with Feishu and Google Meet. Open WebUI is browser-only.
+* **ClawBot Gateway:** OpenClaw's ClawBot gateway handles token auth, device pairing, DuckDuckGo search provider, and websearch tools built in.
 
-## How to use OpenClaw (the OSS AI Assistant platform)?
+### OpenClaw vs Google Gemini (Gemini Alternative)
+* **Plugin Ecosystem:** OpenClaw has extensible plugins for DuckDuckGo search, websearch, code execution, and Baidu AI Cloud Qianfan. Gemini has limited extensions.
+* **Self Hosted:** Full Claw AI control over data. Google Gemini processes everything through Google's cloud.
 
-After deploying, visit `/setup` to configure your LLM provider (OpenAI, Anthropic, Google, or OpenRouter), optionally connect messaging channels, then access the Control UI to start chatting.
+## How to use OpenClaw (the OSS Claw AI platform)?
+
+After deploying, visit `/setup` to configure your LLM provider, optionally connect webchat channels (Telegram, Discord, Feishu, Google Meet), then access the Control UI to start chatting with your Claw AI assistant.
 
 ## How to self host OpenClaw on other VPS Services (OpenClaw self hosting guide)
 
@@ -86,44 +86,44 @@ Ensure your VPS has **Node.js 22+** and **pnpm** installed. OpenClaw bundles Pyt
 ### Configure Environment Variables
 Set up your LLM provider credentials:
 * `OPENAI_API_KEY` or `ANTHROPIC_API_KEY`
-* `OPENCLAW_GATEWAY_TOKEN` for gateway auth
+* `OPENCLAW_GATEWAY_TOKEN` for ClawBot gateway auth
 * Optional: `TELEGRAM_BOT_TOKEN`, `DISCORD_BOT_TOKEN`
 
 ### Start the OpenClaw Application
-Run `openclaw gateway run` to start the gateway, then access the Control UI through the configured port.
+Run `openclaw gateway run` to start the ClawBot gateway, then access the webchat Control UI through the configured port.
 
 ## Official Pricing of OpenClaw (OpenClaw pricing)
 
-OpenClaw is free and open source under the **Apache 2.0 license**. There are no platform fees, subscription charges, or usage limits. You pay only for compute infrastructure and your LLM API provider. Self hosting on Railway is the most cost-effective deployment option with full control.
+OpenClaw is free and open source under the **Apache 2.0 license** with no platform fees or usage limits. You pay only for compute and your LLM API provider. Self hosting on Railway is the most cost-effective option.
 
 ## OpenClaw cloud vs self hosted comparison (Pricing, features, costs, and more)
 
-OpenClaw is designed for self hosting with full control over data and model selection. Railway provides managed infrastructure with persistent volumes, HTTPS, and auto-deploys at a fraction of traditional VPS complexity.
+OpenClaw is designed for self hosting with full control over data, multi-agent workflows, webchat channels, and model selection. Railway provides managed infrastructure with persistent volumes, HTTPS, and auto-deploys at a fraction of VPS hosting Hetzner complexity.
 
 ### Monthly cost of self hosting OpenClaw on Railway
 
-The OpenClaw self hosting cost on Railway is typically $5-$10/month for compute and storage, plus your LLM API costs which vary by provider and usage.
+The OpenClaw self hosting cost on Railway is typically $5-$10/month for compute and storage, plus LLM API costs from your provider.
 
 ### System Requirements for Hosting OpenClaw on a VPS
 
-OpenClaw requires at least 1 vCPU, 1GB RAM, and 2GB storage for state and workspace data, with Node.js 22+ and pnpm installed. Browser automation plugins and Playwright tools need additional memory (2-4GB recommended for heavy browsing workloads).
+OpenClaw requires at least 1 vCPU, 1GB RAM, and 2GB storage for ClawBot state and workspace, with Node.js 22+ and pnpm installed. Browser automation, DuckDuckGo search provider, and websearch tools need 2-4GB RAM for optimal performance.
 
 ## Frequently Asked Questions (FAQs)
 
 ### What is OpenClaw self hosted?
-OpenClaw self hosted means running the AI assistant on your own server (like Railway, VPS, or Docker). This gives you full data ownership, model flexibility, and unlimited usage without cloud subscription fees.
+OpenClaw self hosted means running the Claw AI assistant on your own server (Railway, VPS, or Docker). This gives you full data ownership, multi-agent capabilities, and unlimited usage without cloud subscriptions.
 
 ### How much does OpenClaw self hosting cost on Railway?
-The OpenClaw self hosting cost on Railway is typically $5-$10/month for compute, plus LLM API costs from your provider (OpenAI, Anthropic, etc.).
+The OpenClaw self hosting cost on Railway is typically $5-$10/month for compute, plus LLM API costs from your provider.
 
 ### Is OpenClaw free to use?
 Yes, OpenClaw is fully open source and free under the Apache 2.0 license. You only pay for infrastructure and LLM API usage.
 
-### Can I use my ChatGPT subscription with OpenClaw?
-Yes, OpenClaw supports ChatGPT OAuth via Codex CLI integration, letting you use your existing ChatGPT Plus or Team subscription as the LLM provider without needing a separate API key or additional costs.
+### What channels does OpenClaw support for webchat?
+OpenClaw supports webchat via the Control UI, plus native Telegram, Discord, Slack, WhatsApp, Feishu, Google Meet, and WeChat integrations through the ClawBot gateway.
 
 ### Where can I download OpenClaw?
-You can get OpenClaw from the official [GitHub repository](https://github.com/openclaw/openclaw) or deploy it on Railway with one click using our template.
+Get OpenClaw from the official [GitHub repository](https://github.com/openclaw/openclaw) or deploy on Railway with one click using our template.
 
 ### What are some alternatives to OpenClaw?
-Popular alternatives include ChatGPT Plus (subscription-based), Claude Pro (subscription-based), Open WebUI (open source, browser-only), and Hermes Agent (open source, self-improving). OpenClaw stands out with 347k+ GitHub stars, native multi-channel messaging support, and the broadest LLM provider compatibility of any open-source assistant.
+Alternatives include ChatGPT Plus (closed), Clawd AI (limited), Open WebUI (browser-only), and Hermes Agent (self-improving). OpenClaw stands out with 347k+ stars, multi-agent orchestration, and the broadest channel support including Feishu and Google Meet.
