@@ -7,7 +7,7 @@
 
 ---
 
-![OpenClaw Claw AI open source personal assistant and multi-agent platform](https://res.cloudinary.com/dojdzamvk/image/upload/v1746175200/openclaw_banner_oc.png "Hosting OpenClaw Claw AI assistant on Railway")
+![OpenClaw Claw AI open source personal assistant and multi-agent platform](https://res.cloudinary.com/dh2nt6hgh/image/upload/v1777723896/hero_tlxrkd.png "Hosting OpenClaw Claw AI assistant on Railway")
 
 # Deploy and Host self hosted OpenClaw (Open-Source Claw AI Assistant) on Railway
 
@@ -39,7 +39,7 @@ Here are common use cases for the open-source Claw AI assistant platform:
 * Connecting to 200+ LLM models including Baidu AI Cloud Qianfan, OpenRouter, and custom endpoints through the ClawBot gateway.
 * Managing multiple AI providers through the webchat Control UI with TypeBox schema validation for configuration.
 
-![OpenClaw Claw AI webchat setup wizard and Control UI](https://res.cloudinary.com/dojdzamvk/image/upload/v1746175200/openclaw_setup_ui_oc.png "OpenClaw Claw AI webchat assistant setup wizard")
+![OpenClaw Claw AI webchat setup wizard and Control UI](https://res.cloudinary.com/dh2nt6hgh/image/upload/v1777723897/openclaw_chat_j5afh3.png "OpenClaw Claw AI webchat assistant setup wizard")
 
 ## Dependencies for OpenClaw Docker hosted on Railway
 
