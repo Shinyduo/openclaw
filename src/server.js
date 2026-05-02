@@ -597,6 +597,8 @@ app.get("/setup/api/auth-groups", requireSetupAuth, (_req, res) => {
   res.json({ ok: true, authGroups: AUTH_GROUPS });
 });
 
+const OAUTH_AUTH_CHOICES = new Set(["openai-codex", "codex-cli", "google-antigravity", "google-gemini-cli", "github-copilot", "qwen-portal"]);
+
 function buildOnboardArgs(payload) {
   const args = [
     "onboard",
@@ -620,7 +622,7 @@ function buildOnboardArgs(payload) {
     payload.flow || "quickstart",
   ];
 
-  if (payload.authChoice) {
+  if (payload.authChoice && !OAUTH_AUTH_CHOICES.has(payload.authChoice)) {
     args.push("--auth-choice", payload.authChoice);
 
     // Map secret to correct flag for common choices.
@@ -737,6 +739,20 @@ app.post("/setup/api/run", requireSetupAuth, async (req, res) => {
   let extra = "";
 
   const ok = onboard.code === 0 && isConfigured();
+
+  // OAuth auth choices (openai-codex, codex-cli, etc.) can't run during non-interactive onboarding.
+  // After onboard succeeds, run device-code auth so the user can complete OAuth in their browser.
+  if (ok && payload.authChoice && OAUTH_AUTH_CHOICES.has(payload.authChoice)) {
+    const provider = payload.authChoice === "codex-cli" ? "openai-codex" : payload.authChoice;
+    extra += `\n[oauth] Auth choice "${payload.authChoice}" requires OAuth. Running device-code login...\n`;
+    extra += `[oauth] This will show a URL and code below. Open the URL in your browser, enter the code, and authorize.\n`;
+    const auth = await runCmd(OPENCLAW_NODE, clawArgs(["models", "auth", "login", "--provider", provider, "--device-code"]), { timeoutMs: 180_000 });
+    extra += `\n${auth.output}`;
+    if (auth.code !== 0) {
+      extra += `\n[oauth] Device-code auth exited with code ${auth.code}. You can retry from the Debug Console below:\n`;
+      extra += `  Select: "openclaw models auth login --device-code <provider>" with arg: ${provider}\n`;
+    }
+  }
 
   // Optional setup (only after successful onboarding).
   if (ok) {
