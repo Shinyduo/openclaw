@@ -419,6 +419,8 @@ app.get("/setup", requireSetupAuth, (_req, res) => {
         <option value="openclaw.devices.approve">openclaw devices approve &lt;requestId&gt;</option>
         <option value="openclaw.plugins.list">openclaw plugins list</option>
         <option value="openclaw.plugins.enable">openclaw plugins enable &lt;name&gt;</option>
+        <option value="openclaw.models.auth.login">openclaw models auth login --device-code &lt;provider&gt;</option>
+        <option value="openclaw.config.set">openclaw config set &lt;key&gt; &lt;value&gt;</option>
       </select>
       <input id="consoleArg" placeholder="Optional arg (e.g. 200, gateway.port)" style="flex: 1" />
       <button id="consoleRun" style="background:#0f172a">Run</button>
@@ -990,6 +992,10 @@ const ALLOWED_CONSOLE_COMMANDS = new Set([
   // Plugin management
   "openclaw.plugins.list",
   "openclaw.plugins.enable",
+
+  // Auth (device-code OAuth for headless environments like Railway)
+  "openclaw.models.auth.login",
+  "openclaw.config.set",
 ]);
 
 app.post("/setup/api/console/run", requireSetupAuth, async (req, res) => {
@@ -1073,6 +1079,25 @@ app.post("/setup/api/console/run", requireSetupAuth, async (req, res) => {
       if (!name) return res.status(400).json({ ok: false, error: "Missing plugin name" });
       if (!/^[A-Za-z0-9_-]+$/.test(name)) return res.status(400).json({ ok: false, error: "Invalid plugin name" });
       const r = await runCmd(OPENCLAW_NODE, clawArgs(["plugins", "enable", name]));
+      return res.status(r.code === 0 ? 200 : 500).json({ ok: r.code === 0, output: redactSecrets(r.output) });
+    }
+
+    if (cmd === "openclaw.models.auth.login") {
+      const provider = String(arg || "openai-codex").trim();
+      if (!/^[A-Za-z0-9_-]+$/.test(provider)) return res.status(400).json({ ok: false, error: "Invalid provider name" });
+      const r = await runCmd(OPENCLAW_NODE, clawArgs(["models", "auth", "login", "--provider", provider, "--device-code"]), { timeoutMs: 180_000 });
+      return res.status(r.code === 0 ? 200 : 500).json({ ok: r.code === 0, output: r.output });
+    }
+
+    if (cmd === "openclaw.config.set") {
+      if (!arg) return res.status(400).json({ ok: false, error: "Missing config key=value (e.g. agents.defaults.model.primary openai/gpt-5.5)" });
+      const parts = arg.split(/\s+/);
+      if (parts.length < 2) return res.status(400).json({ ok: false, error: "Format: key value" });
+      const key = parts[0];
+      const value = parts.slice(1).join(" ");
+      const isJson = value.startsWith("{") || value.startsWith("[") || value === "true" || value === "false";
+      const setArgs = isJson ? ["config", "set", "--json", key, value] : ["config", "set", key, value];
+      const r = await runCmd(OPENCLAW_NODE, clawArgs(setArgs));
       return res.status(r.code === 0 ? 200 : 500).json({ ok: r.code === 0, output: redactSecrets(r.output) });
     }
 
